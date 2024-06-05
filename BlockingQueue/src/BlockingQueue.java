@@ -17,4 +17,13 @@ public class BlockingQueue<T> {
         queue.add(item);
         notifyAll();
     }
+
+    public synchronized T take() throws InterruptedException{
+        while (queue.isEmpty()){
+            wait();
+        }
+        T item = queue.poll();
+        notifyAll();
+        return item;
+    }
 }
