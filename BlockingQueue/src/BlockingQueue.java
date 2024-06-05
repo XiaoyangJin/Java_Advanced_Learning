@@ -9,4 +9,12 @@ public class BlockingQueue<T> {
         this.maxSize = maxSize;
         this.queue = queue;
     }
+
+    public synchronized void put(T item) throws InterruptedException{
+        while(queue.size() == maxSize){
+            wait();
+        }
+        queue.add(item);
+        notifyAll();
+    }
 }
