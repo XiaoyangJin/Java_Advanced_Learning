@@ -19,5 +19,5 @@ public class University {
 
     private String name;
     private String domain;
-    private String webPages;
+    private String web_pages;
 }
