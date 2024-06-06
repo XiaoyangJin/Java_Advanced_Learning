@@ -28,17 +28,12 @@ public class UniversityServiceImpl implements UniversityService {
 
     @Override
     public List<University> getAllUniversities() {
-        try{
-            String url = "http://universities.hipolabs.com/search";
-            University[] universities = restTemplate.getForObject(url, University[].class);
-            if(universities == null){
-                throw new CustomException("Found Nothing");
-            }
-            return List.of(universities);
-        } catch(Exception e){
-            log.error("Error fetching all universities from first api(getAllUniversities): " + e.getMessage());
-            throw new CustomException("Error fetching all universities from first api(getAllUniversities): " + e.getMessage());
+        String url = "http://universities.hipolabs.com/search";
+        University[] universities = restTemplate.getForObject(url, University[].class);
+        if (universities == null) {
+            throw new CustomException("Found Nothing");
         }
+        return List.of(universities);
     }
 
     @Override
