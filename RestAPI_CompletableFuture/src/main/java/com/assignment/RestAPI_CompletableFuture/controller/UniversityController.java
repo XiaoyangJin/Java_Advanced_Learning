@@ -18,14 +18,13 @@ public class UniversityController {
     }
 
     @GetMapping
-    public ResponseEntity<List<University>> getAllUniversities() {
-        List<University> universities = universityService.getAllUniversities();
-        return ResponseEntity.ok(universities);
-    }
-
-    @PostMapping
-    public CompletableFuture<ResponseEntity<List<University>>> getAllUniversitiesByCountries(@RequestBody List<String> countries){
-        return universityService.getAllUniversitiesByCountries(countries)
-                .thenApply(ResponseEntity::ok);
+    public ResponseEntity<?> getUniversities(@RequestParam(required = false) List<String> countries){
+        if (countries == null || countries.isEmpty()){
+            List<University> universities = universityService.getAllUniversities();
+            return ResponseEntity.ok(universities);
+        } else {
+            CompletableFuture<List<University>> universitiesFuture = universityService.getAllUniversitiesByCountries(countries);
+            return universitiesFuture.thenApply(ResponseEntity::ok).join();
+        }
     }
 }
