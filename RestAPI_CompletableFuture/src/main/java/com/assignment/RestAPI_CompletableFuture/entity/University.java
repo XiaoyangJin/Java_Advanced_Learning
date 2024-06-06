@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -15,5 +17,5 @@ import lombok.Setter;
 public class University {
     private String name;
     private String domain;
-    private String web_pages;
+    private List<String> web_pages;
 }
