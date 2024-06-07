@@ -32,12 +32,8 @@ public class UniversityServiceImpl implements UniversityService {
     }
 
     @Override
-    public List<University> getAllUniversities() {
-        University[] universities = restTemplate.getForObject(url, University[].class);
-        if (universities == null) {
-            throw new CustomException("Found Nothing");
-        }
-        return List.of(universities);
+    public University[] getAllUniversities() {
+        return restTemplate.getForObject(url, University[].class);
     }
 
     @Override
