@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -37,21 +38,22 @@ public class UniversityServiceImpl implements UniversityService {
     }
 
     @Override
-    public CompletableFuture<List<University>> getAllUniversitiesByCountries(List<String> countries){
-        List<CompletableFuture<List<University>>> futures = new ArrayList<>();
+    public List<University> getAllUniversitiesByCountries(List<String> countries){
+        List<CompletableFuture<University[]>> futures = new ArrayList<>();
         for (String country : countries) {
-            futures.add(CompletableFuture.supplyAsync(() -> {
-                University[] universities = restTemplate.getForObject(url + "?country=" + country.replace(" ", "+"), University[].class);
-                if (universities == null) return new ArrayList<University>();
-                return List.of(universities);
-            }, executorService));
+            futures.add(
+                    CompletableFuture.supplyAsync(
+                            () -> restTemplate.getForObject(url + "?country=" + country, University[].class), executorService));
         }
 
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                .thenApply(ignored -> {
-                    List<University> res = new ArrayList<>();
-                    futures.forEach(future -> res.addAll(future.join()));
-                    return res;
-                });
+        List<University> res = new ArrayList<>();
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                .thenAccept(Ignored -> futures.forEach(
+                        cf -> {
+                            University[] uni = cf.join();
+                            res.addAll(Arrays.asList(uni));
+                        }
+                )).join();
+        return res;
     }
 }
