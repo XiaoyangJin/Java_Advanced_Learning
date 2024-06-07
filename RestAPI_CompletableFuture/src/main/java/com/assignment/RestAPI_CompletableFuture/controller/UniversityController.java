@@ -3,6 +3,7 @@ package com.assignment.RestAPI_CompletableFuture.controller;
 import com.assignment.RestAPI_CompletableFuture.entity.University;
 import com.assignment.RestAPI_CompletableFuture.service.UniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,11 @@ public class UniversityController {
     @Autowired
     public UniversityController(UniversityService universityService) {
         this.universityService = universityService;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllUniversities(){
+        return new ResponseEntity<>(universityService.getAllUniversities(), HttpStatus.OK);
     }
 
     @GetMapping
