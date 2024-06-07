@@ -25,9 +25,10 @@ public class UniversityServiceImpl implements UniversityService {
     @Value("${university-url}")
     private String url;
 
-    public UniversityServiceImpl(@Qualifier("restTemplate") RestTemplate restTemplate) {
+    @Autowired
+    public UniversityServiceImpl(@Qualifier("restTemplate") RestTemplate restTemplate, ExecutorService executorService) {
         this.restTemplate = restTemplate;
-        this.executorService = Executors.newFixedThreadPool(10);
+        this.executorService = executorService;
     }
 
     @Override
