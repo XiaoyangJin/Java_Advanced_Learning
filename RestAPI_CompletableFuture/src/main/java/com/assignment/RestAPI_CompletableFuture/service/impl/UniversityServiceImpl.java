@@ -3,6 +3,7 @@ package com.assignment.RestAPI_CompletableFuture.service.impl;
 import com.assignment.RestAPI_CompletableFuture.entity.University;
 import com.assignment.RestAPI_CompletableFuture.exceptions.CustomException;
 import com.assignment.RestAPI_CompletableFuture.service.UniversityService;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +22,9 @@ public class UniversityServiceImpl implements UniversityService {
     private final RestTemplate restTemplate;
     private final ExecutorService executorService;
 
+    @Value("${university-url}")
+    private String url;
+
     public UniversityServiceImpl(@Qualifier("restTemplate") RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.executorService = Executors.newFixedThreadPool(10);
@@ -28,7 +32,6 @@ public class UniversityServiceImpl implements UniversityService {
 
     @Override
     public List<University> getAllUniversities() {
-        String url = "http://universities.hipolabs.com/search";
         University[] universities = restTemplate.getForObject(url, University[].class);
         if (universities == null) {
             throw new CustomException("Found Nothing");
@@ -41,8 +44,7 @@ public class UniversityServiceImpl implements UniversityService {
         List<CompletableFuture<List<University>>> futures = new ArrayList<>();
         for (String country : countries) {
             futures.add(CompletableFuture.supplyAsync(() -> {
-                String url = "http://universities.hipolabs.com/search?country=" + country.replace(" ", "+");
-                University[] universities = restTemplate.getForObject(url, University[].class);
+                University[] universities = restTemplate.getForObject(url + "?country=" + country.replace(" ", "+"), University[].class);
                 if (universities == null) return new ArrayList<University>();
                 return List.of(universities);
             }, executorService));
