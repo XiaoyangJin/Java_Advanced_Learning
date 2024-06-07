@@ -1,7 +1,6 @@
 package com.assignment.RestAPI_CompletableFuture.service.impl;
 
 import com.assignment.RestAPI_CompletableFuture.entity.University;
-import com.assignment.RestAPI_CompletableFuture.exceptions.CustomException;
 import com.assignment.RestAPI_CompletableFuture.service.UniversityService;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 @Slf4j
