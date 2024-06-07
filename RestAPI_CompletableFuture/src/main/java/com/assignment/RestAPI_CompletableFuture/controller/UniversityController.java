@@ -25,14 +25,8 @@ public class UniversityController {
         return new ResponseEntity<>(universityService.getAllUniversities(), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<?> getUniversities(@RequestParam(required = false) List<String> countries){
-        if (countries == null || countries.isEmpty()){
-            List<University> universities = universityService.getAllUniversities();
-            return ResponseEntity.ok(universities);
-        } else {
-            CompletableFuture<List<University>> universitiesFuture = universityService.getAllUniversitiesByCountries(countries);
-            return universitiesFuture.thenApply(ResponseEntity::ok).join();
-        }
+    @GetMapping(params = "countries")
+    public ResponseEntity<?> getAllUniversitiesByCountries(@RequestParam List<String> countries){
+        return new ResponseEntity<>(universityService.getAllUniversitiesByCountries(countries), HttpStatus.OK);
     }
 }
