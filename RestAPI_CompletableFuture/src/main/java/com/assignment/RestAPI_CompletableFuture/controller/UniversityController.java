@@ -2,6 +2,7 @@ package com.assignment.RestAPI_CompletableFuture.controller;
 
 import com.assignment.RestAPI_CompletableFuture.entity.University;
 import com.assignment.RestAPI_CompletableFuture.service.UniversityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 public class UniversityController {
     private final UniversityService universityService;
 
+    @Autowired
     public UniversityController(UniversityService universityService) {
         this.universityService = universityService;
     }
